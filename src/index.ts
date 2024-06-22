@@ -1,5 +1,11 @@
+import express from 'express'
 try {
-  console.log('starting the app!')
+  const httpServer = express()
+  const PORT = 3200
+
+  httpServer.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}!!!`)
+  })
 } catch (error) {
   handleError(error)
 }
