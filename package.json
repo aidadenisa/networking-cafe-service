@@ -1,0 +1,28 @@
+{
+  "name": "networking-cafe-service",
+  "version": "1.0.0",
+  "description": "Backend Service for Networking Cafe",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm",
+    "build:dev": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --format=esm --watch",
+    "dev": "concurrently --kill-others \"yarn build:dev\" \"nodemon dist/index.js\"",
+    "start": "node dist/index.js"
+  },
+  "author": "Aida-Denisa Opirlesc",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.14.7",
+    "esbuild": "^0.21.5",
+    "typescript": "^5.5.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "concurrently": "^8.2.2",
+    "eslint": "9.x",
+    "globals": "^15.6.0",
+    "nodemon": "^3.1.4",
+    "typescript-eslint": "^7.13.1"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  /* More about what these options do here: https://www.totaltypescript.com/tsconfig-cheat-sheet */
+  "compilerOptions": {
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* NodeNext makes sure that typescript treats modules in a similar way as Node (it will resolve modules from node_modules, as well as from .ts files, but you need to specify the extension) */
+    "module": "NodeNext", // this requires to have `type: module` in package.json if we want .ts files to be treated like ESM modules.
+    "moduleResolution": "NodeNext", // set by default to NodeNext if module is set to NodeNext; it supports both EMS and CJS modules, so it will decide if it outputs import/export or require statements.
+
+    /* If your code doesn't run in the DOM: */
+    "lib": ["es2022"],
+
+    /* Project paths */
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "dist",
+    "sourceMap": true,
+    "paths": {
+      // Create an alias so that you don't need to import from relative paths and don't need to add extension to ts files.
+      "@/*": ["./*.ts"]
+    }
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "dist", "logs"]
+}
