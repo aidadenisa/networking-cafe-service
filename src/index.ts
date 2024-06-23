@@ -1,11 +1,8 @@
-import express from 'express'
+import { HTTPServer } from './infra/http/server.js'
 try {
-  const httpServer = express()
-  const PORT = 3200
+  const httpServer = new HTTPServer(3200)
 
-  httpServer.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}!!!`)
-  })
+  await httpServer.listen()
 } catch (error) {
   handleError(error)
 }
