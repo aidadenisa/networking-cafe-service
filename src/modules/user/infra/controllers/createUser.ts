@@ -1,8 +1,9 @@
+import type { User } from '@/modules/user/domain/user'
 import type { IController } from '@/modules/user/infra/controllers/routeHandler'
 import type { Request, Response } from 'express'
 
 interface ICreateUserCommand {
-  execute: () => void
+  execute: () => User
 }
 export class CreateUserController implements IController {
   private createUserCommand: ICreateUserCommand
@@ -10,7 +11,7 @@ export class CreateUserController implements IController {
     this.createUserCommand = command
   }
   run(req: Request, res: Response) {
-    this.createUserCommand.execute()
-    res.send('good')
+    const user = this.createUserCommand.execute()
+    res.status(201).json(user)
   }
 }

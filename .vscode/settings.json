@@ -1,0 +1,18 @@
+{
+  "workbench.colorTheme": "Default Dark Modern",
+  "editor.tabSize": 2,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.printWidth": 140,
+  "launch": {
+    "configurations": [],
+    "compounds": []
+  },
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifierEnding": "index",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifierEnding": "index"
+}
