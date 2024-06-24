@@ -1,5 +1,5 @@
 import express from 'express'
-import type { Express } from 'express'
+import type { Express, Router } from 'express'
 
 export class HTTPServer {
   private server: Express
@@ -16,5 +16,9 @@ export class HTTPServer {
         resolve()
       })
     })
+  }
+
+  registerNewRouter(path: string, router: Router) {
+    this.server.use(path, router)
   }
 }
