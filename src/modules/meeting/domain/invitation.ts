@@ -1,10 +1,10 @@
 import type { UUID } from 'crypto'
 
 export enum InvitationStatus {
-  CREATED,
-  SENT,
-  ACCEPTED,
-  REJECTED,
+  CREATED = 'created',
+  SENT = 'sent',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
 }
 
 type InvitationProps = {

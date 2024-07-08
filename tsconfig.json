@@ -29,7 +29,12 @@
     "paths": {
       // Create an alias so that you don't need to import from relative paths and don't need to add extension to ts files.
       "@/*": ["./*.ts"]
-    }
+    },
+
+    /* For TypeORM */
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "dist", "logs"]
