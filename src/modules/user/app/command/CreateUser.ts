@@ -9,7 +9,7 @@ export type CreateUserInput = {
   birthday: Date
 }
 interface IUserRepository {
-  insertUser: (input: CreateUserInput) => User
+  createUser: (input: CreateUserInput) => User
 }
 
 export class CreateUserHandler implements ICommand {
@@ -24,7 +24,7 @@ export class CreateUserHandler implements ICommand {
       lastName: 'Doe',
       birthday: new Date(1990, 0, 1),
     }
-    const user = this.repository.insertUser(input)
+    const user = this.repository.createUser(input)
     console.log('executing create user handler')
     return user
   }

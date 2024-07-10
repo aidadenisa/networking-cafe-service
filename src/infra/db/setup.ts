@@ -8,10 +8,10 @@ export const AppDataSource = new DataSource({
   username: 'ncs',
   password: 'S3cret',
   database: 'ncs_db',
-  synchronize: true,
+  synchronize: false,
   logging: ['query', 'error', 'schema', 'warn', 'info', 'log'], // Enable detailed logging
   entities: ['./**/*.entity.ts'],
   subscribers: [],
   migrationsTableName: 'migrations',
-  migrations: ['./migrations/*{.js,.ts}'],
+  migrations: ['./src/infra/db/migrations/*{.js,.ts}'],
 })

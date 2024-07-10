@@ -10,7 +10,9 @@
     "dev": "concurrently --kill-others \"yarn build:dev\" \"nodemon dist/index.js\"",
     "start": "node dist/index.js",
     "dev:debug": "tsx src/index.ts",
-    "typeorm": "tsx node_modules/typeorm/cli.js"
+    "typeorm": "tsx node_modules/typeorm/cli.js",
+    "migration:generate": "yarn typeorm migration:generate -d ./src/infra/db/setup.ts",
+    "migration:run": "yarn typeorm migration:run -d ./src/infra/db/setup.ts"
   },
   "author": "Aida-Denisa Opirlesc",
   "license": "MIT",
