@@ -37,5 +37,8 @@
     "strictPropertyInitialization": false
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "dist", "logs"]
+  "exclude": ["node_modules", "dist", "logs"],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }
