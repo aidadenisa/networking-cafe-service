@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "build": "tsc && tsc-alias -p tsconfig.json",
+    "build": "tsc -p tsconfig.prod.json && tsc-alias -p tsconfig.prod.json",
     "start": "yarn build && NODE_ENV=prod node dist/index.js",
     "dev": "yarn dev:startDB && nodemon",
     "dev:debug": "yarn dev:startDB && tsx src/index.ts",
@@ -13,7 +13,8 @@
     "typeorm": "tsx node_modules/typeorm/cli.js",
     "migration:generate": "yarn typeorm migration:generate -d ./src/infra/db/setup.ts",
     "migrations:run": "yarn typeorm migration:run -- -d ./src/infra/db/setup.ts",
-    "migration:revert": "yarn typeorm migration:revert -- -d ./src/infra/db/setup.ts"
+    "migration:revert": "yarn typeorm migration:revert -- -d ./src/infra/db/setup.ts",
+    "test": "node --experimental-vm-modules $(yarn bin jest)"
   },
   "author": "Aida-Denisa Opirlesc",
   "license": "MIT",
@@ -26,11 +27,13 @@
   "devDependencies": {
     "@eslint/js": "^9.5.0",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.14.7",
     "concurrently": "^8.2.2",
     "esbuild": "^0.21.5",
     "eslint": "9.x",
     "globals": "^15.6.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "tsc": "^2.0.4",
     "tsc-alias": "^1.8.10",
