@@ -1,22 +1,18 @@
+import { Email } from '@/modules/user/domain/email'
 import { randomUUID, type UUID } from 'crypto'
 
-interface UserProperties {
-  id: string
-  firstName: string
-  lastName: string
-  birthday: Date
+interface UserInput {
+  id?: UUID
+  email: string
 }
 
 export class User {
   readonly id: UUID
-  readonly firstName: string
-  readonly lastName: string
-  readonly birthday: Date
+  readonly email: Email
 
-  constructor(properties: UserProperties) {
-    this.id = randomUUID()
-    this.firstName = properties.firstName
-    this.lastName = properties.lastName
-    this.birthday = properties.birthday
+  constructor(properties: UserInput) {
+    this.id = properties.id ?? randomUUID()
+
+    this.email = new Email(properties.email)
   }
 }

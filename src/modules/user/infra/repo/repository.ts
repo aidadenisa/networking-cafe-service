@@ -3,21 +3,19 @@ import { User } from '@/modules/user/domain/user'
 import { UserEntity } from '@/modules/user/infra/repo/user.entity'
 
 export class UserRepository {
-  createUser(input: CreateUserInput) {
+  async createUser(input: User) {
     const newUser = new UserEntity()
-    newUser.firstName = input.firstName
-    newUser.lastName = input.lastName
+    newUser.id = input.id
+    newUser.email = input.email.toString()
     try {
-      newUser.save()
+      await newUser.save()
     } catch (error: any) {
       throw new Error(`Error inserting a new user in the DB: ${error.message}`)
     }
 
     return new User({
-      id: input.id,
-      firstName: input.firstName,
-      lastName: input.lastName,
-      birthday: input.birthday,
+      id: newUser.id,
+      email: newUser.email,
     })
   }
 }

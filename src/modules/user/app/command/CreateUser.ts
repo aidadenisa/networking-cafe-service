@@ -1,15 +1,13 @@
 import type { ICommand } from '@/app/command'
-import type { User } from '@/modules/user/domain/user'
+import { Email } from '@/modules/user/domain/email'
+import { User } from '@/modules/user/domain/user'
 import { randomUUID, type UUID } from 'crypto'
 
 export type CreateUserInput = {
-  id: UUID
-  firstName: string
-  lastName: string
-  birthday: Date
+  email: string
 }
 interface IUserRepository {
-  createUser: (input: CreateUserInput) => User
+  createUser: (input: User) => Promise<User>
 }
 
 export class CreateUserHandler implements ICommand {
@@ -17,15 +15,14 @@ export class CreateUserHandler implements ICommand {
   constructor(repo: IUserRepository) {
     this.repository = repo
   }
-  execute() {
-    const input: CreateUserInput = {
-      id: randomUUID(),
-      firstName: 'John',
-      lastName: 'Doe',
-      birthday: new Date(1990, 0, 1),
+  async execute(input: CreateUserInput) {
+    try {
+      const user = new User(input)
+      const result = await this.repository.createUser(user)
+      console.log('executing create user handler')
+      return result
+    } catch (error: any) {
+      throw new Error(`Could not create user: ${error.message}`)
     }
-    const user = this.repository.createUser(input)
-    console.log('executing create user handler')
-    return user
   }
 }

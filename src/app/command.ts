@@ -1,3 +1,3 @@
 export interface ICommand {
-  execute: () => any
+  execute: (...args: any[]) => any
 }

@@ -8,8 +8,5 @@ export class UserEntity extends BaseEntity {
   id: UUID
 
   @Column('text', { nullable: false })
-  firstName: string
-
-  @Column('text', { nullable: false })
-  lastName: string
+  email: string
 }

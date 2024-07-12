@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json } from 'express'
 import type { Express, Router } from 'express'
 
 export class HTTPServer {
@@ -7,6 +7,8 @@ export class HTTPServer {
   constructor(port: number) {
     this.port = port
     this.server = express()
+
+    this.server.use(json())
   }
 
   async listen(): Promise<void> {
