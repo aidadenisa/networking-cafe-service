@@ -1,19 +1,20 @@
-import type { CreateUserInput } from '@/modules/user/app/command/CreateUser'
+import { InternalError } from '@/app/error'
+import type { Result } from '@/app/result'
 import { User } from '@/modules/user/domain/user'
 import { UserEntity } from '@/modules/user/infra/repo/user.entity'
 
 export class UserRepository {
-  async createUser(input: User) {
+  async createUser(input: User): Promise<Result<User>> {
     const newUser = new UserEntity()
     newUser.id = input.id
     newUser.email = input.email.toString()
     try {
       await newUser.save()
     } catch (error: any) {
-      throw new Error(`Error inserting a new user in the DB: ${error.message}`)
+      return { error: new InternalError(`error inserting new user in the DB: ${error.message}`) }
     }
 
-    return new User({
+    return User.create({
       id: newUser.id,
       email: newUser.email,
     })

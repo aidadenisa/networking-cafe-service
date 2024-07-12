@@ -1,10 +1,11 @@
+import type { Result } from '@/app/result'
 import type { CreateUserInput } from '@/modules/user/app/command/CreateUser'
 import type { User } from '@/modules/user/domain/user'
 import type { IController } from '@/modules/user/infra/controllers/routeHandler'
 import type { Request, Response } from 'express'
 
 interface ICreateUserCommand {
-  execute: (input: CreateUserInput) => Promise<User>
+  execute: (input: CreateUserInput) => Promise<Result<User>>
 }
 export class CreateUserController implements IController {
   private createUserCommand: ICreateUserCommand
@@ -19,11 +20,11 @@ export class CreateUserController implements IController {
 
     const input: CreateUserInput = { email: req.body.email }
 
-    try {
-      const user = await this.createUserCommand.execute(input)
-      res.status(201).json(user)
-    } catch (error: any) {
-      res.status(500).send('Error creating user')
+    const { data: user, error } = await this.createUserCommand.execute(input)
+    if (error) {
+      return res.status(error.getCode()).send(error.getAPIResultMessage())
     }
+
+    return res.status(201).json(user)
   }
 }
