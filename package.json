@@ -7,8 +7,9 @@
     "lint": "eslint .",
     "build": "tsc && tsc-alias -p tsconfig.json",
     "start": "yarn build && NODE_ENV=prod node dist/index.js",
-    "dev": "tsx watch src/index.ts",
-    "dev:debug": "tsx src/index.ts",
+    "dev": "yarn dev:startDB && nodemon",
+    "dev:debug": "yarn dev:startDB && tsx src/index.ts",
+    "dev:startDB": "cd src/infra/db/local && docker compose down && docker compose up -d",
     "typeorm": "tsx node_modules/typeorm/cli.js",
     "migration:generate": "yarn typeorm migration:generate -d ./src/infra/db/setup.ts",
     "migrations:run": "yarn typeorm migration:run -- -d ./src/infra/db/setup.ts",
@@ -36,5 +37,12 @@
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
     "typescript-eslint": "^7.13.1"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,tsx",
+    "exec": "tsx src/index.ts"
   }
 }
