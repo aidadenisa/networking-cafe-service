@@ -5,7 +5,7 @@ import { User } from '@/modules/user/domain/user'
 export type CreateUserInput = {
   email: string
 }
-interface IUserRepository {
+export interface IUserRepository {
   createUser: (input: User) => Promise<Result<User>>
 }
 
