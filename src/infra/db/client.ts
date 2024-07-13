@@ -13,4 +13,11 @@ export class DatabaseClient {
     await this.dataSource.runMigrations()
     console.log('Migrations ran successfully!')
   }
+  async disconnect(): Promise<void> {
+    await this.dataSource.destroy()
+    console.log('Closing DB connection.')
+  }
+  async query(sqlQuery: string, params?: any[]): Promise<any> {
+    return this.dataSource.query(sqlQuery, params)
+  }
 }

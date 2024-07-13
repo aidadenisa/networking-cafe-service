@@ -14,7 +14,9 @@
     "migration:generate": "yarn typeorm migration:generate -d ./src/infra/db/setup.ts",
     "migrations:run": "yarn typeorm migration:run -- -d ./src/infra/db/setup.ts",
     "migration:revert": "yarn typeorm migration:revert -- -d ./src/infra/db/setup.ts",
-    "test": "node --experimental-vm-modules $(yarn bin jest)"
+    "test": "node --experimental-vm-modules $(yarn bin jest) --testPathIgnorePatterns='.*\\.int\\.test\\.ts$'",
+    "test:integration": "node --experimental-vm-modules $(yarn bin jest) --testPathPattern='.*\\.int\\.test\\.ts$'",
+    "test:all": "node --experimental-vm-modules $(yarn bin jest)"
   },
   "author": "Aida-Denisa Opirlesc",
   "license": "MIT",
@@ -32,6 +34,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.7",
     "concurrently": "^8.2.2",
+    "docker-compose": "^0.24.8",
     "esbuild": "^0.21.5",
     "eslint": "9.x",
     "globals": "^15.6.0",
