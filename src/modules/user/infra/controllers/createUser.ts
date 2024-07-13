@@ -4,7 +4,7 @@ import type { User } from '@/modules/user/domain/user'
 import type { IController } from '@/modules/user/infra/controllers/routeHandler'
 import type { Request, Response } from 'express'
 
-interface ICreateUserCommand {
+export interface ICreateUserCommand {
   execute: (input: CreateUserInput) => Promise<Result<User>>
 }
 export class CreateUserController implements IController {
