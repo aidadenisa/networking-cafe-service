@@ -1,16 +1,20 @@
 import { CreateUserHandler } from '@/modules/user/app/command/CreateUser'
 import { RouteHandler, type IHttpServer } from '@/modules/user/infra/controllers/routeHandler'
 import { CreateUserController } from '@/modules/user/infra/controllers/createUser'
-import { UserRepository } from '@/modules/user/infra/repo/repository'
+import type { IUserRepository } from '@/modules/user/infra/repo/repository'
+import type { IDatabaseClient } from '@/infra/db/types'
+import { UserRepoFactory } from '@/modules/user/infra/repo/factory'
 
 export class UserModule {
   private httpServer: IHttpServer
-  constructor(httpServer: IHttpServer) {
+  private dbClient: IDatabaseClient
+  constructor(httpServer: IHttpServer, dbClient: IDatabaseClient) {
     this.httpServer = httpServer
+    this.dbClient = dbClient
   }
   bootstrap() {
     // Repo
-    const userRepo = new UserRepository()
+    const userRepo: IUserRepository = UserRepoFactory.createRepo(this.dbClient)
 
     // Commands
     const createUserCommand = new CreateUserHandler(userRepo)

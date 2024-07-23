@@ -1,9 +1,10 @@
-import { DatabaseClient } from '@/infra/db/client'
-import { testDBDown, testDBUp } from '@/infra/db/testUtils'
+import { DBFactory } from '@/infra/db/DBFactory'
+import { testDBDown, testDBUp } from '@/infra/db/postgres/testUtils'
+import type { IDatabaseClient } from '@/infra/db/types'
 import { User } from '@/modules/user/domain/user'
-import { UserRepository } from '@/modules/user/infra/repo/repository'
+import { UserRepoFactory } from '@/modules/user/infra/repo/factory'
 
-const db = new DatabaseClient()
+const db: IDatabaseClient = DBFactory.createDB()
 
 beforeAll(async () => {
   await testDBUp(db)
@@ -20,11 +21,9 @@ describe('UserRepository Integration Tests', () => {
     if (!input) {
       return fail('user input creation failed')
     }
-    const repo = new UserRepository()
+    const repo = UserRepoFactory.createRepo(db)
 
     const { data: result, error } = await repo.createUser(input)
-
-    const actual = await db.query('select * from "user" where id = $1', [input.id])
 
     expect(error).toBeUndefined()
     expect(result).toBeDefined()
@@ -32,10 +31,14 @@ describe('UserRepository Integration Tests', () => {
     expect(result?.email.toString()).toBe(input.email.toString())
     expect(result?.id).toBe(input.id)
 
+    const { data: actual, error: errr } = await repo.getUserById(input.id)
+    expect(errr).toBeUndefined()
     expect(actual).toHaveLength(1)
-    expect(actual[0]).toBeDefined()
-    expect(actual[0]).toBeDefined()
-    expect(actual[0].email).toBe(input.email.toString())
-    expect(actual[0].id).toBe(input.id)
+    expect(actual).toBeDefined()
+    expect(actual).not.toBeNull()
+    if (actual) {
+      expect(actual.email).toBe(input.email.toString())
+      expect(actual.id).toBe(input.id)
+    }
   })
 })

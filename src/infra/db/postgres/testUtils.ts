@@ -1,13 +1,14 @@
-import type { DatabaseClient } from '@/infra/db/client'
+import type { SQLClient } from '@/infra/db/postgres/client'
+import type { IDatabaseClient } from '@/infra/db/types'
 import { v2 as compose } from 'docker-compose'
 import path from 'path'
 
-export const testDBUp = async (db: DatabaseClient) => {
+export const testDBUp = async (db: IDatabaseClient) => {
   await compose.upAll({ cwd: path.join(process.cwd(), '/src/infra/db/local'), log: true })
   await db.connect()
 }
 
-export const testDBDown = async (db: DatabaseClient) => {
+export const testDBDown = async (db: IDatabaseClient) => {
   await db.disconnect()
   await compose.downAll({ cwd: path.join(process.cwd(), '/src/infra/db/local'), log: true })
 }

@@ -22,6 +22,7 @@ export class CreateUserController implements IController {
 
     const { data: user, error } = await this.createUserCommand.execute(input)
     if (error) {
+      console.log(error)
       return res.status(error.getCode()).send(error.getAPIResultMessage())
     }
 

@@ -1,10 +1,10 @@
-import { AppDataSource } from '@/infra/db/setup'
 import { DataSource } from 'typeorm'
+import type { IDatabaseClient } from '@/infra/db/types'
 
-export class DatabaseClient {
-  private dataSource: DataSource
-  constructor() {
-    this.dataSource = AppDataSource
+export class SQLClient implements IDatabaseClient {
+  dataSource: DataSource
+  constructor(ds: DataSource) {
+    this.dataSource = ds
   }
   async connect(): Promise<void> {
     await this.dataSource.initialize()
