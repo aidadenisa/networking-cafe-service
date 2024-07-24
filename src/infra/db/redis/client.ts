@@ -4,6 +4,7 @@ import { createClient, type RedisClientType } from 'redis'
 export class RedisClient implements IDatabaseClient {
   private client: RedisClientType
   constructor() {
+    console.log(process.env.REDIS_HOST, process.env.REDIS_PORT)
     this.client = createClient({
       url: `${process.env.REDIS_HOST}://localhost:${process.env.REDIS_PORT}`,
       password: process.env.REDIS_PASSWORD,
@@ -16,7 +17,11 @@ export class RedisClient implements IDatabaseClient {
   }
 
   async disconnect(): Promise<void> {
-    await this.client.quit()
+    try {
+      await this.client.disconnect()
+    } catch (err: any) {
+      console.log('Error disconnecting redis: ' + err.message)
+    }
     console.log('Redis connection removed.')
   }
   // Function to set a key-value pair in Redis

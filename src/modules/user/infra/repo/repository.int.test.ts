@@ -1,10 +1,13 @@
+import 'dotenv/config'
+
 import { DBFactory } from '@/infra/db/DBFactory'
 import { testDBDown, testDBUp } from '@/infra/db/postgres/testUtils'
 import type { IDatabaseClient } from '@/infra/db/types'
 import { User } from '@/modules/user/domain/user'
 import { UserRepoFactory } from '@/modules/user/infra/repo/factory'
 
-const db: IDatabaseClient = DBFactory.createDB()
+const config = { IN_MEMORY_DB_FLAG: false }
+const db: IDatabaseClient = DBFactory.createDB(config)
 
 beforeAll(async () => {
   await testDBUp(db)
@@ -33,11 +36,10 @@ describe('UserRepository Integration Tests', () => {
 
     const { data: actual, error: errr } = await repo.getUserById(input.id)
     expect(errr).toBeUndefined()
-    expect(actual).toHaveLength(1)
     expect(actual).toBeDefined()
     expect(actual).not.toBeNull()
     if (actual) {
-      expect(actual.email).toBe(input.email.toString())
+      expect(actual.email.toString()).toBe(input.email.toString())
       expect(actual.id).toBe(input.id)
     }
   })

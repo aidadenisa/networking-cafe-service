@@ -6,10 +6,13 @@ import { UserModule } from '@/modules/user/index'
 import type { IDatabaseClient } from '@/infra/db/types'
 import { DBFactory } from '@/infra/db/DBFactory'
 try {
+  // Config
+  const config = { IN_MEMORY_DB_FLAG: process.env.IN_MEMORY_DB_FLAG === 'true' }
+
   // Infra
   const httpServer = new HTTPServer(3200)
 
-  const db: IDatabaseClient = DBFactory.createDB()
+  const db: IDatabaseClient = DBFactory.createDB(config)
   await db.connect()
 
   // Modules
