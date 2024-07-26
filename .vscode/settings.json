@@ -15,5 +15,6 @@
   "javascript.preferences.importModuleSpecifierEnding": "index",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifierEnding": "index",
-  "jest.jestCommandLine": "yarn test:all --"
+  "jest.jestCommandLine": "yarn test:all --",
+  "jest.runMode": "on-demand"
 }

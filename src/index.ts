@@ -3,8 +3,8 @@ import 'dotenv/config'
 
 import { HTTPServer } from '@/infra/http/server'
 import { UserModule } from '@/modules/user/index'
-import type { IDatabaseClient } from '@/infra/db/types'
 import { DBFactory } from '@/infra/db/DBFactory'
+import type { SQLClient } from '@/infra/db/client'
 try {
   // Config
   const config = { IN_MEMORY_DB_FLAG: process.env.IN_MEMORY_DB_FLAG === 'true' }
@@ -12,7 +12,7 @@ try {
   // Infra
   const httpServer = new HTTPServer(3200)
 
-  const db: IDatabaseClient = DBFactory.createDB(config)
+  const db: SQLClient = DBFactory.createSQLDB(config)
   await db.connect()
 
   // Modules

@@ -1,21 +1,22 @@
 import 'dotenv/config'
 
 import { DBFactory } from '@/infra/db/DBFactory'
-import { testDBDown, testDBUp } from '@/infra/db/postgres/testUtils'
-import type { IDatabaseClient } from '@/infra/db/types'
+import { testDBDown, testDBUp } from '@/infra/db/testUtils'
 import { User } from '@/modules/user/domain/user'
-import { UserRepoFactory } from '@/modules/user/infra/repo/factory'
+import { UserRepository } from '@/modules/user/infra/repo/repository'
+import type { SQLClient } from '@/infra/db/client'
 
-const config = { IN_MEMORY_DB_FLAG: false }
-const db: IDatabaseClient = DBFactory.createDB(config)
+let db: SQLClient
+const config = { IN_MEMORY_DB_FLAG: process.env.IN_MEMORY_DB_FLAG === 'true' }
 
 beforeAll(async () => {
+  db = DBFactory.createSQLDB(config)
   await testDBUp(db)
-})
+}, 10 * 1000)
 
 afterAll(async () => {
   await testDBDown(db)
-})
+}, 10 * 1000)
 
 describe('UserRepository Integration Tests', () => {
   it('creates new user', async () => {
@@ -24,7 +25,7 @@ describe('UserRepository Integration Tests', () => {
     if (!input) {
       return fail('user input creation failed')
     }
-    const repo = UserRepoFactory.createRepo(db)
+    const repo = new UserRepository(db)
 
     const { data: result, error } = await repo.createUser(input)
 
