@@ -9,7 +9,12 @@ type ErrorConfig = {
   type: ErrorType
 }
 
-class BaseError {
+interface IError {
+  getCode: () => number
+  getAPIResultMessage: () => string
+}
+
+class BaseError implements IError {
   message: string
   type: ErrorType
 
@@ -19,45 +24,50 @@ class BaseError {
   }
 
   getCode() {
-    switch (this.type) {
-      case ErrorType.ErrValidation:
-        return 400
-      case ErrorType.ErrNotFound:
-        return 404
-      case ErrorType.ErrInternal:
-      default:
-        return 500
-    }
+    return 500
   }
 
   getAPIResultMessage() {
-    switch (this.type) {
-      case ErrorType.ErrValidation:
-        return this.message
-      case ErrorType.ErrNotFound:
-        return 'Not Found'
-      case ErrorType.ErrInternal:
-      default:
-        return 'Internal Server Error'
-    }
+    return 'Internal Server Error'
   }
 }
 
-export class ValidationError extends BaseError {
+export class ValidationError extends BaseError implements IError {
   constructor(message: string) {
     super({ message, type: ErrorType.ErrValidation })
   }
-}
+  getCode() {
+    return 400
+  }
 
-export class NotFoundError extends BaseError {
-  constructor(message: string) {
-    super({ message, type: ErrorType.ErrNotFound })
+  getAPIResultMessage() {
+    return this.message
   }
 }
 
-export class InternalError extends BaseError {
+export class NotFoundError extends BaseError implements IError {
+  constructor(message: string) {
+    super({ message, type: ErrorType.ErrNotFound })
+  }
+  getCode() {
+    return 404
+  }
+  getAPIResultMessage() {
+    return 'Not Found'
+  }
+}
+
+export class InternalError extends BaseError implements IError {
   constructor(message: string) {
     super({ message, type: ErrorType.ErrInternal })
+  }
+
+  getCode() {
+    return 500
+  }
+
+  getAPIResultMessage() {
+    return 'Internal Server Error'
   }
 }
 
