@@ -1,9 +1,7 @@
+import { ResponseTimeDecorator } from '@/infra/http/decorators'
+import type { IController } from '@/infra/http/types'
 import express from 'express'
 import type { Request, Response, Router } from 'express'
-
-export interface IController {
-  run: (req: Request, res: Response) => any | void
-}
 
 export type Controllers = {
   createUser: IController
@@ -20,7 +18,9 @@ export class RouteHandler {
   private controllers: Controllers
   constructor(httpServer: IHttpServer, controllers: Controllers) {
     this.httpServer = httpServer
-    this.controllers = controllers
+    this.controllers = {
+      createUser: new ResponseTimeDecorator(controllers.createUser),
+    }
   }
 
   registerRoutes() {

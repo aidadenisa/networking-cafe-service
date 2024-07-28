@@ -1,7 +1,7 @@
 import type { Result } from '@/app/result'
+import type { IController } from '@/infra/http/types'
 import type { CreateUserInput } from '@/modules/user/app/command/CreateUser'
 import type { User } from '@/modules/user/domain/user'
-import type { IController } from '@/modules/user/infra/controllers/routeHandler'
 import type { Request, Response } from 'express'
 
 export interface ICreateUserCommand {
