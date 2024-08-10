@@ -1,8 +1,10 @@
+import { AggregateRoot } from '@/domain/aggregate'
+import { MeetingCreated } from '@/modules/meeting/domain/events/meetingCreated'
 import { Invitation, InvitationStatus } from '@/modules/meeting/domain/invitation'
 import type { Reservation } from '@/modules/meeting/domain/reservation'
 import { randomUUID, type UUID } from 'crypto'
 
-enum MeetingStatus {
+export enum MeetingStatus {
   CREATED,
   INVITATIONS_SENT,
   RESERVATION_SENT,
@@ -17,11 +19,11 @@ type MeetingProps = {
   locationID: UUID
   startAt: Date
   endAt: Date
-  status: MeetingStatus
+  status?: MeetingStatus
 }
 
 // Meeting Aggregate
-export class Meeting {
+export class Meeting extends AggregateRoot {
   private id: UUID
   private initiatorID: UUID
   private locationID: UUID
@@ -33,14 +35,17 @@ export class Meeting {
   private reservation: Reservation | null
 
   constructor(props: MeetingProps) {
+    super()
     this.id = props.id
     this.initiatorID = props.initiatorID
     this.locationID = props.locationID
     this.startAt = props.startAt
     this.endAt = props.endAt
-    this.status = props.status
+    this.status = props.status === undefined ? MeetingStatus.CREATED : props.status
     this.reservation = null
     this.invitations = this.createInvitations(props.inviteesIDs)
+
+    this.addCreateMeetingEvent()
   }
 
   private createInvitations(inviteesIDs: UUID[]): Invitation[] {
@@ -58,5 +63,9 @@ export class Meeting {
       invitations.push(invitation)
     })
     return invitations
+  }
+
+  addCreateMeetingEvent() {
+    this.addDomainEvent(new MeetingCreated(this.id))
   }
 }
