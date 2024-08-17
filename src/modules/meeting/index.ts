@@ -1,7 +1,8 @@
-import type { IDomainEventPublisher } from '@/app/publisher'
+import { DomainEventGenericsPublisher, type IDomainEventPublisher } from '@/app/publisher'
 import type { SQLClient } from '@/infra/db/client'
 import { CreateMeetingHandler, type IMeetingRepository } from '@/modules/meeting/app/command/CreateMeeting'
-import { MeetingCreatedObserver } from '@/modules/meeting/app/observers/MeetingCreatedObserver'
+import { MeetingCreatedGenericsSubscriber, MeetingCreatedSubscriber } from '@/modules/meeting/app/subscribers/MeetingCreatedSubscriber'
+import { MeetingCreated } from '@/modules/meeting/domain/events/meetingCreated'
 import type { IHttpServer } from '@/modules/user/infra/controllers/routeHandler'
 
 export class MeetingModule {
@@ -15,8 +16,16 @@ export class MeetingModule {
   }
   bootstrap() {
     // Create observers and subscribe them to the domain event publisher
-    const meetingCretedObserver = new MeetingCreatedObserver()
-    this.domainEventsPublisher.subscribe(meetingCretedObserver)
+    const meetingCreatedSubscriber = new MeetingCreatedSubscriber()
+    this.domainEventsPublisher.subscribe(meetingCreatedSubscriber.eventType, meetingCreatedSubscriber)
+
+    const meetingCreatedPublisher = new DomainEventGenericsPublisher<MeetingCreated>()
+    const meetingCreatedGenericSubscriber = new MeetingCreatedGenericsSubscriber()
+    meetingCreatedPublisher.subscribe(meetingCreatedGenericSubscriber)
+
+    // POC: If I try to assign a subscriber that doesn't handle this event, I get a TS error
+    // const meetingCancelledGenericSubscriber = new MeetingCancelledGenericsSubscriber()
+    // meetingCreatedPublisher.subscribe(meetingCancelledGenericSubscriber)
 
     // TODO: Repo
     const meetingRepo = {} as IMeetingRepository

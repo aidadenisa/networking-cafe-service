@@ -6,7 +6,7 @@ import { UserModule } from '@/modules/user/index'
 import { DBFactory } from '@/infra/db/DBFactory'
 import type { SQLClient } from '@/infra/db/client'
 import { MeetingModule } from '@/modules/meeting/index'
-import { DomainEventPublisher } from '@/app/publisher'
+import { DomainEventMapPublisher } from '@/app/publisher'
 try {
   // Config
   const config = { IN_MEMORY_DB_FLAG: process.env.IN_MEMORY_DB_FLAG === 'true' }
@@ -20,7 +20,7 @@ try {
   // Publishers
   // QQ: By using this approach, I am using a DomainEventPublisher For all the events.
   //     Would it be better to have a publisher for each event?
-  const pub = new DomainEventPublisher()
+  const pub = new DomainEventMapPublisher()
 
   // Modules
   const userModule = new UserModule(httpServer, db)
