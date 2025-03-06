@@ -1,5 +1,6 @@
 import type { DomainEventType, IDomainEvent } from '@/domain/events'
 import type { IDomainEventGenericsSubscriber, IDomainEventSubscriber } from '@/app/subscriber'
+import type { Result } from '@/app/result'
 
 // Implementations
 // ------------------------------------------
@@ -27,7 +28,10 @@ export class DomainEventMapPublisher implements IDomainEventPublisher {
 
   unsubscribe(eventType: DomainEventType, subscriber: IDomainEventSubscriber) {
     const subscribers = this.subscribers.get(eventType)
-    subscribers?.delete(subscriber)
+    if (subscribers) {
+      subscribers.delete(subscriber)
+      this.subscribers.set(eventType, subscribers)
+    }
   }
 
   dispatch(event: IDomainEvent) {
@@ -70,4 +74,35 @@ export class DomainEventGenericsPublisher<T extends IDomainEvent> implements IDo
 }
 
 // 3. Using callback handlers
-// TODO:
+// Inspiration here: https://khalilstemmler.com/articles/typescript-domain-driven-design/chain-business-logic-domain-events/
+
+// Can be done either as a unique publisher (option 1)
+// or as event-specific publishers with generics (option 2).
+// I am going with option 2.
+
+type DomainEventHanlder<T extends IDomainEvent> = (event: T) => Result<any>
+interface IDomainEventCallbackPublisher<T extends IDomainEvent> {
+  dispatch(event: IDomainEvent): void
+  subscribe(handler: DomainEventHanlder<T>): void
+  unsubscribe(handler: DomainEventHanlder<T>): void
+}
+export class DomainEventCallbackPublisher<T extends IDomainEvent> implements IDomainEventCallbackPublisher<T> {
+  handlers: Set<DomainEventHanlder<T>> = new Set()
+
+  subscribe(handler: DomainEventHanlder<T>) {
+    this.handlers.add(handler)
+  }
+
+  unsubscribe(handler: DomainEventHanlder<T>) {
+    this.handlers.delete(handler)
+  }
+
+  dispatch(event: T) {
+    if (!this.handlers.size) return
+
+    this.handlers.forEach((handle) => {
+      // TODO: return/throw errors if that's the case.
+      handle(event)
+    })
+  }
+}
